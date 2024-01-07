@@ -4,8 +4,8 @@ import { useMutation } from '@apollo/client';
 import { SET_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
-export default function Home() {
-
+export default function Home({navigation}) {
+    console.log("navigation :", navigation)
     const [SetUser] = useMutation(SET_USER);
 
     const [username, setUsername] = useState("");
@@ -28,12 +28,14 @@ export default function Home() {
 
     return (
         <>
+
             <Text>this is Home</Text>
             <Text>Username</Text>
             <TextInput onChangeText={(e) => setUsername(e)} />
             <Text>Username</Text>
             <TextInput onChangeText={(e) => setPassword(e)} />
             <Pressable onPress={(e) => handleFormSubmit(e)}><Text>button</Text></Pressable>
+            <Pressable onPress={()=>navigation.navigate('Listing')}></Pressable>
         </>
 
     )

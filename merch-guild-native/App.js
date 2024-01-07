@@ -1,8 +1,13 @@
-import React from 'react';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Home, Search, Listing } from './pages';
+import { pages } from './pages';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import styles from './utils/styles';
+import { Pressable, Text } from 'react-native';
 
+const Stack = createNativeStackNavigator();
+
+//init GQL client, attach the client's jwt to their requests
 const client = new ApolloClient({
   uri: '/graphql',
   cache: new InMemoryCache(),
@@ -11,25 +16,58 @@ const client = new ApolloClient({
   }
 });
 
+const test = pages.filter((i) => i.name != 'Home')
+console.log("pages :", test)
+
 export default function App() {
+
+  //managing header buttons at top level means they dont have direct access to the navigation prop
+  const navRef = useNavigationContainerRef();
+
   return (
     <ApolloProvider client={client}>
-      <Router>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/search' element={<Search />} />
-          <Route path='/listing' element={<Listing />} />
-        </Routes>
-      </Router>
+      <NavigationContainer ref={navRef}>
+        <Stack.Navigator initialRouteName='Home' screenOptions={styles.header}>
+          {pages.map((i, j) => {
+
+            //pull the names of all pages other than the current one
+            const others = pages.filter((k) => k.name != i.name).map((l) => l.name);
+
+            return (
+              <Stack.Screen
+                key={j}
+                name={i.name}
+                component={i.component}
+                options={{
+                  title: i.name,
+
+                  //the buttons use the ref to wait for the navigators to finish mounting
+                  headerRight: () => (
+                    others.map((k, l) => {
+                      console.log(k);
+                      return (
+                        <Pressable
+                          key={l}
+                          onPress={() => navRef.navigate(k)}
+                        ><Text>{k}</Text></Pressable>
+                      )
+                    })
+                  )
+                }}
+              />
+            )
+          })}
+        </Stack.Navigator>
+
+        {/* <Router>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/search' element={<Search />} />
+            <Route path='/listing' element={<Listing />} />
+          </Routes>
+        </Router> */}
+      </NavigationContainer>
     </ApolloProvider>
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
