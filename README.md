@@ -1,5 +1,5 @@
 # traders-guild-native
-##Description
+## Description
 The Trader's guild is a web-based solution for listing tradeable items for [Dark and Darker](https://www.darkanddarker.com/).
 
 ## Deployment
