@@ -8,7 +8,6 @@ export const ListingPreview = ({ listing, removeListing }) => {
     const timeStamp = new Date(createdAt).toLocaleDateString();
 
     const items = [listing.have, listing.want];
-    console.log("this is items :", items)
     return (
         <>
             <View>

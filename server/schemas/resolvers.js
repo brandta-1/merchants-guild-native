@@ -13,13 +13,9 @@ const resolvers = {
         },
 
         getListing: async (parent, args, context) => {
-            console.log("hit here")
             const contextID = context.user._id 
-            console.log(context.user);
-            console.log("these area args :", args)
             //if there are no args, then just get the logged in user's listings:
             if (!Object.keys(args).length) {
-                console.log("args?")
                 const listings = await Listing.aggregate([
                     {
                         $addFields:
@@ -49,8 +45,7 @@ const resolvers = {
                 }));
                 haveWant.push(items);
             }
-            // console.log("this is haveWant 0: ", haveWant[0]);
-            // console.log("this is haveWant 1: ", haveWant[1]);
+
             const listings = await Listing.aggregate([
                 {
                     //the listing must have atleast one item in common with the search
@@ -87,7 +82,6 @@ const resolvers = {
                 { $project: { __v: 0 } }
             ]);
 
-            // console.log("listings before return: ", util.inspect(listings, { depth: null }))
             return listings;
         }
     },
@@ -128,9 +122,6 @@ const resolvers = {
             for (const items of [have, want]) {
 
                 const itemIDs = await Promise.all(items.map(async (i) => {
-
-                    console.log("THIS IS I: ", i);
-
                     //check the DB for the item, and add it if it doesnt exist
                     if (!i.enchantments.length) {
                         const item = await Item.findOneAndUpdate(
@@ -186,18 +177,14 @@ const resolvers = {
                 want: haveWant[1],
                 description: description
             });
-            console.log("made it here?")
             await listing.populate('have want');
-            console.log("this is listing :", util.inspect(listing, { depth: null }));
             return listing;
         },
 
         deleteListing: async (parent, args, context) => {
-            console.log("hitting :", args);
             // const deleteThis = new mongoose.mongo.ObjectId(args.listing)
             const contextID = context.user._id 
             const listing = await Listing.findOneAndDelete({ _id: args.listing, user: contextID });
-            console.log("this is listing in BE: ", listing)
             return listing;
         }
 

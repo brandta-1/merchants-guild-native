@@ -7,16 +7,10 @@ export const EnchantForm = ({ id, updateToParent }) => {
 
     const [enchant, setEnchant] = useState(null);
 
+    //prop drilling
     useEffect(() => {
-        console.log("checking enchant state: ", enchant);
-    })
-
-    useEffect(() => {
-        console.log("im firing with this: ", enchant);
         updateToParent(enchant, id);
     }, [enchant])
-
-
 
     const handleSelect = (key, val) => {
 
@@ -30,12 +24,10 @@ export const EnchantForm = ({ id, updateToParent }) => {
         }
         //else they're just removing the enchantment value  
         else {
-            console.log("you hit this")
             setEnchant((c) => { return { property: c.property } })
         }
     }
-
-
+    
     return (
         <>
             <Select

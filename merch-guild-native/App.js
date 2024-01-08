@@ -1,5 +1,6 @@
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { pages } from './pages';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import styles from './utils/styles';
@@ -7,13 +8,26 @@ import { HeaderNav } from './components/HeaderNav';
 
 const Stack = createNativeStackNavigator();
 
-//init GQL client, attach the client's jwt to their requests
-const client = new ApolloClient({
-  uri: '/graphql',
-  cache: new InMemoryCache(),
+const setAuthLink = setContext((request, previousContext) => ({
   headers: {
+    ...previousContext.headers,
     authorization: localStorage.getItem('id_token')
   }
+}));
+
+const httpLink = new HttpLink({
+  uri: '/graphql',
+});
+
+
+//init GQL client, attach the client's jwt to their requests
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: setAuthLink.concat(httpLink)
+  // headers: {
+  //   //this needs some kind of useEffect, or dont use localStorage at all for security reasons
+  //   authorization: localStorage.getItem('id_token')
+  // }
 });
 
 
@@ -29,6 +43,9 @@ export default function App() {
           {pages.map((i, j) => {
 
             //pull the names of all pages other than the current one
+
+
+
             const others = pages.filter((k) => k.name != i.name).map((l) => l.name);
 
             return (

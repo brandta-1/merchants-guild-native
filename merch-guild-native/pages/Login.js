@@ -17,7 +17,6 @@ export default function Login({ navigation }) {
             const { data } = await Login({
                 variables: { username: username, password: password }
             });
-            console.log(data);
             const { token } = await data.login;
             Auth.login(token);
             setUsername('');
@@ -29,18 +28,15 @@ export default function Login({ navigation }) {
     }
 
     const handleSignUpSubmit = async (e) => {
-        console.log("hello???")
         try {
-            console.log(username,password);
             const { data } = await SetUser({
                 variables: { username: username, password: password }
             });
-            console.log(data);
             const { token } = await data.setUser;
             Auth.login(token);
             setUsername('');
             setPassword('');
-            navigation.navigate('Listing');
+            navigation.navigate('Home');
         } catch (err) {
             console.error(err);
         }

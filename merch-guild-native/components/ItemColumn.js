@@ -26,6 +26,7 @@ export const ItemColumn = ({ type, sendToForm, reset, search }) => {
         })
     }
 
+    //find and remove the item given its id
     const deleteItem = (id) => {
         setItems((c) => {
             const index = c.map((i) => i.id).indexOf(id);
@@ -35,20 +36,18 @@ export const ItemColumn = ({ type, sendToForm, reset, search }) => {
     }
 
     const updateFromChild = (item, id) => {
-
-
+        //get the item thats being changed
         setItems((c) => {
-
-
             const change = c.findIndex((i) => {
                 return i.id === id
             })
 
 
-
+            //if it wasnt found then dont change state
             if (change === -1) {
                 return c;
             }
+            //otherwise safely rewrite all properties with spread
             c[change] = {
                 ...c[change],
                 name: item.name,
@@ -63,8 +62,8 @@ export const ItemColumn = ({ type, sendToForm, reset, search }) => {
 
     return (
         <>
-            <View style={{maxWidth: "50%"}}>
-                
+            <View style={{ maxWidth: "50%" }}>
+
                 <Text style={[styles.text, { textAlign: 'center' }]}>Items {search ? 'they' : 'you'} {type}:</Text>
                 {items.map((i, j) => {
                     return (

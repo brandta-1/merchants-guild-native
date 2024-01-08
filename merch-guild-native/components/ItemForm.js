@@ -19,10 +19,8 @@ export const ItemForm = ({ updateToParent, id, length, deleteItem }) => {
     const [numEnchs, setNumEnchs] = useState([0]);
 
     const updateFromChild = (ench, id) => {
-        console.log("recieved from child: ", ench, id, " this is state rn: ", item);
-
+     
         if (ench?.property) {
-            console.log("ENCH PROPERTY")
             setItem((c) => {
                 const change = c.enchantments.findIndex((i) => {
                     return i.id === id
@@ -31,26 +29,18 @@ export const ItemForm = ({ updateToParent, id, length, deleteItem }) => {
                     ...c.enchantments[change],
                     property: ench.property,
                     //  ...(ench?.value ? ({ value: ench.value }) : ({}))
-                    // TODO: above lined seemd to be bugged, workaround will be to remove when sending GQL request
+                    // TODO: above line seems to be bugged, workaround will be to remove when sending GQL request
                     value: ench.value
                 }
                 return c;
             })
 
         } else  {
-            console.log("logging the expression: ");
             setItem((c)=>{
                 const index = c.enchantments.map((i) => i.id).indexOf(id);
                 c.enchantments[index]={id: id};
                 return c;
             })
-            //else we need to remove the deleted enchantment from state
-            // setItem((c) => {
-            //     console.log("current state at this function: ", c)
-            //     const newState = c.filter((i) => i.id === id);
-            //     console.log("newState test: ", newState);
-            //     return newState;
-            // })
         }
     }
 
@@ -65,7 +55,6 @@ export const ItemForm = ({ updateToParent, id, length, deleteItem }) => {
     //the number of enchantments is determined by the rarity, with rarer items giving more
     //since enchantments will also be potentially re-ordered, they need IDs
     useEffect(() => {
-        console.log("this is item :", item)
         setNumEnchs(() => {
             const enchantSlots = maxEnchant.slice(-maxEnchant.indexOf(item.rarity) - 1);
             return enchantSlots.map((i) => {
