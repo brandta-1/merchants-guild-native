@@ -3,7 +3,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { pages } from './pages';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import styles from './utils/styles';
-import { Pressable, Text } from 'react-native';
+import { HeaderNav } from './components/HeaderNav';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,8 +16,6 @@ const client = new ApolloClient({
   }
 });
 
-const test = pages.filter((i) => i.name != 'Home')
-console.log("pages :", test)
 
 export default function App() {
 
@@ -27,7 +25,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <NavigationContainer ref={navRef}>
-        <Stack.Navigator initialRouteName='Home' screenOptions={styles.header}>
+        <Stack.Navigator initialRouteName='Home' screenOptions={styles.main}>
           {pages.map((i, j) => {
 
             //pull the names of all pages other than the current one
@@ -40,19 +38,9 @@ export default function App() {
                 component={i.component}
                 options={{
                   title: i.name,
-
+                  headerLeft: () => null,
                   //the buttons use the ref to wait for the navigators to finish mounting
-                  headerRight: () => (
-                    others.map((k, l) => {
-                      console.log(k);
-                      return (
-                        <Pressable
-                          key={l}
-                          onPress={() => navRef.navigate(k)}
-                        ><Text>{k}</Text></Pressable>
-                      )
-                    })
-                  )
+                  headerRight: () => (<HeaderNav others={others} navRef={navRef} />)
                 }}
               />
             )

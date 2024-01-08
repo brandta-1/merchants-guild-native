@@ -36,6 +36,7 @@ query GetListing($have: [haveWant], $want: [haveWant]) {
     }
     description
     createdAt
+    ownership
     updatedAt
   }
 }

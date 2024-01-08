@@ -4,8 +4,6 @@ const { signToken } = require('../utils/auth');
 const util = require('util');
 const mongoose = require('mongoose');
 
-const testingID = new mongoose.mongo.ObjectId('65998cab71449c7669565937');
-
 const resolvers = {
 
     Query: {
@@ -16,10 +14,12 @@ const resolvers = {
 
         getListing: async (parent, args, context) => {
             console.log("hit here")
-            const contextID = context.user ? context.user._id : testingID;
-
+            const contextID = context.user._id 
+            console.log(context.user);
+            console.log("these area args :", args)
             //if there are no args, then just get the logged in user's listings:
-            if (!args) {
+            if (!Object.keys(args).length) {
+                console.log("args?")
                 const listings = await Listing.aggregate([
                     {
                         $addFields:
@@ -39,8 +39,6 @@ const resolvers = {
 
             const { have, want } = args;
 
-            console.log(util.inspect(args, { depth: null }));
-
             let haveWant = [];
             for (const list of [have, want]) {
                 const items = await Promise.all(list.map(async (i) => {
@@ -51,18 +49,15 @@ const resolvers = {
                 }));
                 haveWant.push(items);
             }
-
-            console.log("this is haveWant :", util.inspect(haveWant, { depth: null }));
-
-            console.log("haveWant[0] :", haveWant[1])
-
+            // console.log("this is haveWant 0: ", haveWant[0]);
+            // console.log("this is haveWant 1: ", haveWant[1]);
             const listings = await Listing.aggregate([
                 {
                     //the listing must have atleast one item in common with the search
                     $match: {
                         $or: [
                             { have: { $in: haveWant[0][0].map(i => i._id) } },
-                            { want: { $in: haveWant[0][1].map(i => i._id) } }
+                            { want: { $in: haveWant[1][0].map(i => i._id) } }
                         ]
                     }
                 },
@@ -89,10 +84,10 @@ const resolvers = {
                         as: "want"
                     }
                 },
-                { $project: {  __v: 0 } }
+                { $project: { __v: 0 } }
             ]);
 
-            console.log("listings before return: ", util.inspect(listings, { depth: null }))
+            // console.log("listings before return: ", util.inspect(listings, { depth: null }))
             return listings;
         }
     },
@@ -123,8 +118,8 @@ const resolvers = {
         },
 
         setListing: async (parent, args, context) => {
-
-            const contextID = context.user ? context.user._id : testingID;
+            console.log("here are args :", args)
+            const contextID = context.user._id 
 
             const { have, want, owner, description } = args;
 
@@ -198,9 +193,11 @@ const resolvers = {
         },
 
         deleteListing: async (parent, args, context) => {
-
-            const contextID = context.user ? context.user._id : testingID;
-            const listing = await Listing.findOneAndDelete({_id: args._id, user: contextID});
+            console.log("hitting :", args);
+            // const deleteThis = new mongoose.mongo.ObjectId(args.listing)
+            const contextID = context.user._id 
+            const listing = await Listing.findOneAndDelete({ _id: args.listing, user: contextID });
+            console.log("this is listing in BE: ", listing)
             return listing;
         }
 

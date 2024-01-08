@@ -13,6 +13,7 @@ type User {
     _id: ID
     user: ID
     owner: String
+    ownership: Boolean
     have: [Item]
     want: [Item]
     description: String
@@ -29,7 +30,7 @@ type Item {
 
 type Enchantment {
     property: String
-    value: Int
+    value: Float
 }
 
 type Auth {
@@ -61,7 +62,7 @@ input haveWant {
 
 input enchantments {
     property: String,
-    value: Int
+    value: Float
 }
 `;
 
