@@ -7,6 +7,7 @@ import { GET_LISTING } from '../utils/queries';
 import { DELETE_LISTING } from '../utils/mutations';
 import { ListingPreview } from '../components/ListingPreview';
 import { useMutation, useLazyQuery } from '@apollo/client';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Search() {
 
@@ -14,6 +15,7 @@ export default function Search() {
 
   const [listings, setListings] = useState(null);
   const [GetListing, { loading, data }] = useLazyQuery(GET_LISTING);
+  const [reset, setReset] = useState();
 
   const removeListing = async (listing) => {
     try {
@@ -40,7 +42,8 @@ export default function Search() {
       });
       const res = data.getListing;
       setListings(res);
-
+      //reset the form
+      setReset(uuidv4());
     } catch (err) {
       console.log(err);
     }
@@ -73,7 +76,7 @@ export default function Search() {
         styles.view
       }>
 
-        <ListingForm sendToParent={updateFromChild} search={true} />
+        <ListingForm sendToParent={updateFromChild} search={true} reset={reset} />
 
         {listings &&
           <>

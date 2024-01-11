@@ -8,6 +8,7 @@ import { GET_LISTING } from '../utils/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { ListingPreview } from '../components/ListingPreview';
 import { v4 as uuidv4 } from 'uuid';
+
 export default function Listing() {
 
   const [SetListing] = useMutation(SET_LISTING);
