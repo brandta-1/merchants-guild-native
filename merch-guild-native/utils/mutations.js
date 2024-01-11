@@ -54,6 +54,7 @@ export const SET_LISTING = gql`
         }
         description
         createdAt
+        ownership
         updatedAt
     }
 }

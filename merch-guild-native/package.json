@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build": "expo export:web"
+    "build": "expo export:web",
+    "lint:fix": "eslint utils/**/*.js --fix"
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
@@ -30,7 +31,9 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2"
   },
   "private": true
 }

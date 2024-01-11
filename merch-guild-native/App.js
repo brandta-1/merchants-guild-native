@@ -5,7 +5,12 @@ import { pages } from './pages';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import styles from './utils/styles';
 import { HeaderNav } from './components/HeaderNav';
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 
+if (__DEV__) {  // Adds messages only in a dev environment
+  loadDevMessages();
+  loadErrorMessages();
+}
 const Stack = createNativeStackNavigator();
 
 const setAuthLink = setContext((request, previousContext) => ({
@@ -30,7 +35,6 @@ const client = new ApolloClient({
   // }
 });
 
-
 export default function App() {
 
   //managing header buttons at top level means they dont have direct access to the navigation prop
@@ -39,29 +43,27 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <NavigationContainer ref={navRef}>
-        <Stack.Navigator initialRouteName='Home' screenOptions={styles.main}>
-          {pages.map((i, j) => {
+        <Stack.Navigator initialRouteName='Search' screenOptions={styles.main}>
+          
+            {pages.map((i, j) => {
 
-            //pull the names of all pages other than the current one
-
-
-
-            const others = pages.filter((k) => k.name != i.name).map((l) => l.name);
-
-            return (
-              <Stack.Screen
-                key={j}
-                name={i.name}
-                component={i.component}
-                options={{
-                  title: i.name,
-                  headerLeft: () => null,
-                  //the buttons use the ref to wait for the navigators to finish mounting
-                  headerRight: () => (<HeaderNav others={others} navRef={navRef} />)
-                }}
-              />
-            )
-          })}
+              //pull the names of all pages other than the current one
+              const others = pages.filter((k) => k.name != i.name).map((l) => l.name);
+              return (
+                <Stack.Screen
+                  key={j}
+                  name={i.name}
+                  component={i.component}
+                  options={{
+                    title: i.name,
+                    headerLeft: () => null,
+                    //the buttons use the ref to wait for the navigators to finish mounting
+                    headerRight: () => (<HeaderNav others={others} navRef={navRef} />)
+                  }}
+                />
+              )
+            })}
+      
         </Stack.Navigator>
 
         {/* <Router>

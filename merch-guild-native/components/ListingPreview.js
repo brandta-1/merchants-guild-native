@@ -2,35 +2,37 @@ import { Text, View, Pressable } from 'react-native';
 import { ItemsPreview } from './ItemsPreview';
 import styles from '../utils/styles';
 
-export const ListingPreview = ({ listing, removeListing }) => {
+export const ListingPreview = ({ listing, removeListing, search }) => {
 
-    const { owner, description, createdAt, ownership, _id } = listing;
-    const timeStamp = new Date(createdAt).toLocaleDateString();
+  const { owner, description, createdAt, ownership, _id } = listing;
+  const timeStamp = new Date(createdAt).toLocaleDateString();
 
-    const items = [listing.have, listing.want];
-    return (
-        <>
-            <View>
-                <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.text}> <Text style={styles.label}>Character:</Text> {owner}</Text>
-                    <Text style={styles.text}> <Text style={styles.label}>Date listed:</Text> {timeStamp}</Text>
-                    {ownership && <Pressable style={styles.deleteButton} onPress={() => removeListing(_id)}><Text>Delete</Text></Pressable>}
+  const items = [listing.have, listing.want];
+  return (
+    <>
+      <View style={styles.preview}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.text}> <Text style={styles.label}>Character:</Text> {owner}</Text>
+          <Text style={styles.text}> <Text style={styles.label}>Date listed:</Text> {timeStamp}</Text>
+        </View>
+        {(ownership || !search) && <Pressable style={styles.deleteButton} onPress={() => removeListing(_id)}><Text>Delete</Text></Pressable>}
 
-                </View>
+      </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
 
 
-                    {items.map((i, j) => {
-                        return (
-                            <View style={{flex: 1}}>
-                                <ItemsPreview items={i} key={j} position={j} />
-                            </View>
-                        )
-                    })}
-                </View>
-                {description && <Text>{description}</Text>}
+        {items.map((i, j) => {
+          return (
+            <View style={{ flex: 1 }} key={j}>
+              <ItemsPreview items={i} position={j} />
             </View>
-        </>
-    )
+          )
+        })}
+      </View>
+      {description && <Text>{description}</Text>}
+    </View >
+    </>
+  )
 }

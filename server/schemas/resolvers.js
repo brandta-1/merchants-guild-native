@@ -13,7 +13,8 @@ const resolvers = {
         },
 
         getListing: async (parent, args, context) => {
-            const contextID = context.user._id 
+            const contextID = context?.user?._id
+            console.log("contextID: ", contextID);
             //if there are no args, then just get the logged in user's listings:
             if (!Object.keys(args).length) {
                 const listings = await Listing.aggregate([
@@ -34,10 +35,11 @@ const resolvers = {
             }
 
             const { have, want } = args;
-
+            console.log("server recieved want: ", want);
             let haveWant = [];
             for (const list of [have, want]) {
                 const items = await Promise.all(list.map(async (i) => {
+                    console.log("this is the item: ", i)
                     const agg = [
                         { $match: { name: i.name } }
                     ]
@@ -45,21 +47,22 @@ const resolvers = {
                 }));
                 haveWant.push(items);
             }
-
+            console.log("this is haveWant00: ", haveWant[0][0]);
+            console.log("this is haveWant10: ", haveWant[1][0]);
             const listings = await Listing.aggregate([
                 {
                     //the listing must have atleast one item in common with the search
                     $match: {
                         $or: [
-                            { have: { $in: haveWant[0][0].map(i => i._id) } },
-                            { want: { $in: haveWant[1][0].map(i => i._id) } }
+                            { have: { $in: haveWant[0][0] ? haveWant[0][0].map(i => i._id) : [] } },
+                            { want: { $in: haveWant[1][0] ? haveWant[1][0].map(i => i._id) : [] } }
                         ]
                     }
                 },
                 {
                     //check if the logged in user owns any of the matched listings
                     $addFields: {
-                        ownership: { $in: ["$user", [new mongoose.Types.ObjectId(contextID)]] }
+                        ownership: { $in: ["$user", [new mongoose.Types.ObjectId(contextID)]] },
                     }
                 },
                 //populate the items subdocuments
@@ -81,7 +84,7 @@ const resolvers = {
                 },
                 { $project: { __v: 0 } }
             ]);
-
+            console.log("listings before return :", listings)
             return listings;
         }
     },
@@ -113,7 +116,7 @@ const resolvers = {
 
         setListing: async (parent, args, context) => {
             console.log("here are args :", args)
-            const contextID = context.user._id 
+            const contextID = context.user._id
 
             const { have, want, owner, description } = args;
 
@@ -169,7 +172,7 @@ const resolvers = {
                 haveWant.push(itemIDs);
             }
 
-            const listing = await Listing.create({
+            let listing = await Listing.create({
                 // user: context.user._id,
                 user: contextID,
                 owner: owner,
@@ -178,12 +181,13 @@ const resolvers = {
                 description: description
             });
             await listing.populate('have want');
-            return listing;
+            return { ...listing.toObject(), ownership: true };
         },
 
         deleteListing: async (parent, args, context) => {
             // const deleteThis = new mongoose.mongo.ObjectId(args.listing)
-            const contextID = context.user._id 
+            console.log("received these args: ", args)
+            const contextID = context.user._id
             const listing = await Listing.findOneAndDelete({ _id: args.listing, user: contextID });
             return listing;
         }
