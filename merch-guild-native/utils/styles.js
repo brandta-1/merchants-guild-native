@@ -13,7 +13,8 @@ export default StyleSheet.create({
       fontFamily: 'Helvetica'
     },
     contentStyle: {
-      backgroundColor: '#fff'
+      backgroundColor: 'green',
+      minHeight: 'fit-content'
     },
   },
   preview: {
@@ -92,5 +93,10 @@ export default StyleSheet.create({
 
   label: {
     color: 'rgb(150,150,150)'
-  }
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    gap: 4
+  },
 });

@@ -43,7 +43,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <NavigationContainer ref={navRef}>
-        <Stack.Navigator initialRouteName='Search' screenOptions={styles.main}>
+        <Stack.Navigator initialRouteName='Home' screenOptions={styles.main}>
           
             {pages.map((i, j) => {
 
@@ -55,6 +55,7 @@ export default function App() {
                   name={i.name}
                   component={i.component}
                   options={{
+                    contentStyle: {backgroundColor: "#252525", minHeight: 'auto'},
                     title: i.name,
                     headerLeft: () => null,
                     //the buttons use the ref to wait for the navigators to finish mounting
