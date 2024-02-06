@@ -1,6 +1,5 @@
-import { Text } from 'react-native'
+import React from 'react';
+import { Text } from 'react-native';
 export default function NewPage() {
-    return (
-        <Text> test</Text>
-    )
+  return <Text> test</Text>;
 }

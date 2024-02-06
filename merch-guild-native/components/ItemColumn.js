@@ -1,19 +1,28 @@
-import { useState, useEffect } from 'react';
-import { Text, Pressable, TextInput, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, Pressable, View } from 'react-native';
 import styles from '../utils/styles';
 import { v4 as uuidv4 } from 'uuid';
 import { ItemForm } from './ItemForm';
+import PropTypes from 'prop-types';
 
-export const ItemColumn = ({ type, sendToForm, reset, search }) => {
-
-  const [items, setItems] = useState([{
-    //generate uuid for mapping components that can be re-ordered
-    id: uuidv4()
-  }]);
+export const ItemColumn = ({ column, sendToForm, reset, search }) => {
+  console.log(
+    'these are ordered types: ',
+    typeof column,
+    typeof sendToForm,
+    typeof reset,
+    typeof search
+  );
+  const [items, setItems] = useState([
+    {
+      //generate uuid for mapping components that can be re-ordered
+      id: uuidv4()
+    }
+  ]);
 
   useEffect(() => {
-    sendToForm(type, items)
-  }, [items])
+    sendToForm(column, items);
+  }, [items]);
 
   useEffect(() => {
     setItems([{ name: undefined, rarity: 'Uncommon', enchantments: [], id: uuidv4() }]);
@@ -22,9 +31,9 @@ export const ItemColumn = ({ type, sendToForm, reset, search }) => {
   //add a new empty item to the item array
   const addItem = () => {
     setItems((c) => {
-      return [...c, { name: undefined, rarity: 'Uncommon', enchantments: [], id: uuidv4() }]
-    })
-  }
+      return [...c, { name: undefined, rarity: 'Uncommon', enchantments: [], id: uuidv4() }];
+    });
+  };
 
   //find and remove the item given its id
   const deleteItem = (id) => {
@@ -32,17 +41,16 @@ export const ItemColumn = ({ type, sendToForm, reset, search }) => {
       const index = c.map((i) => i.id).indexOf(id);
       const newState = c.toSpliced(index, 1);
       return newState;
-    })
-  }
+    });
+  };
 
   const updateFromChild = (item, id) => {
     //get the item thats being changed
 
     setItems((c) => {
       const change = c.findIndex((i) => {
-        return i.id === id
-      })
-
+        return i.id === id;
+      });
 
       //if it wasnt found then dont change state
       if (change === -1) {
@@ -54,26 +62,39 @@ export const ItemColumn = ({ type, sendToForm, reset, search }) => {
         name: item.name,
         rarity: item.rarity,
         enchantments: item.enchantments
-      }
+      };
 
-      return c
+      return c;
     });
-  }
+  };
   //delete an item from the item array
 
   return (
-    <>
-      <View style={{ maxWidth: "50%" }}>
+    <View style={{ maxWidth: '33%', flex: 1, gap: '15px' }}>
+      <Text style={[styles.text, { textAlign: 'center', fontSize: 16, fontWeight: 'bold' }]}>
+        Items {search ? 'they' : 'you'} {column}:
+      </Text>
+      {items.map((i) => {
+        return (
+          <ItemForm
+            key={i.id}
+            id={i.id}
+            updateToParent={updateFromChild}
+            length={items.length}
+            deleteItem={deleteItem}
+          />
+        );
+      })}
+      <Pressable onPress={addItem}>
+        <Text style={[styles.text, styles.button()]}>Add Item</Text>
+      </Pressable>
+    </View>
+  );
+};
 
-        <Text style={[styles.text, { textAlign: 'center' }]}>Items {search ? 'they' : 'you'} {type}:</Text>
-        {items.map((i, j) => {
-          return (
-            <ItemForm key={i.id} id={i.id} updateToParent={updateFromChild} length={items.length} deleteItem={deleteItem} />
-          )
-        })}
-        <Pressable onPress={addItem}><Text style={[styles.text, styles.button]}>Add Item</Text></Pressable>
-      </View>
-    </>
-
-  )
-}
+ItemColumn.propTypes = {
+  column: PropTypes.string,
+  sendToForm: PropTypes.func,
+  reset: PropTypes.string,
+  search: PropTypes.bool
+};

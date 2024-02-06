@@ -8,4 +8,4 @@ export const pages = [
   { name: 'Listing', component: Listing },
   { name: 'Search', component: Search },
   { name: 'Login', component: Login }
-]; 
+];

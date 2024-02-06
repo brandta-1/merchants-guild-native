@@ -1,6 +1,18 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
+
+export const wide = 720;
+
+export const dynamicWidth = () => {
+  const { width } = useWindowDimensions();
+  return width < wide;
+};
 
 export default StyleSheet.create({
+  query: (wBool) => {
+    return {
+      width: wBool ? '95%' : '50%'
+    };
+  },
 
   main: {
     headerStyle: {
@@ -11,48 +23,53 @@ export default StyleSheet.create({
     headerTitleStyle: {
       fontWeight: 'bold',
       fontFamily: 'Helvetica'
-    },
-    contentStyle: {
-      backgroundColor: 'green',
-      minHeight: 'fit-content'
-    },
+    }
   },
   preview: {
-    backgroundColor: "#252525",
+    backgroundColor: '#303030',
     paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 8
+    borderStyle: 'outset',
+    borderWidth: 'medium'
   },
   text: {
     fontFamily: 'Helvetica',
-    color: '#fff'
+    color: '#EBCE76'
   },
-
   view: {
-    flex: 1, alignItems: "center", gap: 6,
-
+    flex: 1,
+    alignItems: 'center',
+    gap: 6
   },
   border: {
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: '#fff'
   },
-  button: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: 'rgb(150,150,150)',
-    textAlign: 'center'
+  button: (hover) => {
+    return {
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      elevation: 3,
+      borderRadius: '0px',
+      backgroundColor: '#222222',
+      textAlign: 'center',
+      borderStyle: 'outset',
+      borderWidth: 'medium',
+      borderColor: hover ? '#ff0000' : '#222222'
+    };
   },
+
   input: {
-    backgroundColor: '#fff', color: '#000'
+    backgroundColor: '#fff',
+    color: '#000'
   },
   headerButtonsView: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: "2%"
+    marginRight: '15px',
+    gap: '2%'
   },
 
   headerButtons: {
@@ -70,7 +87,6 @@ export default StyleSheet.create({
     backgroundColor: '#B80000'
   },
 
-  //per the wiki
   uncommon: {
     color: 'rgb(98, 190, 11)'
   },
@@ -96,7 +112,22 @@ export default StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 4
   },
+
+  select: function () {
+    return {
+      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+      singleValue: (base) => ({ ...base, ...this.text }),
+      placeholder: (base) => ({ ...base, ...this.text }),
+      control: (base) => ({
+        ...base,
+        ...this.button(),
+        '&:hover': {
+          borderColor: 'red'
+        }
+      })
+    };
+  }
 });

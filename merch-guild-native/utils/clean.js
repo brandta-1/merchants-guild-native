@@ -7,15 +7,15 @@ export const cleanseArray = (arr) => {
     i.enchantments = i.enchantments.filter((i) => i.property);
     //remove React array ids, and any empty values
     i.enchantments.forEach((i) => {
-      delete i.id
+      delete i.id;
       if (!i.value) {
-        delete i.value
+        delete i.value;
       } else {
         //getting a GQL type error without this,
         // this is being caused by the textInput component being used for values
         i.value = parseInt(i.value, 10);
       }
-    })
+    });
   });
   return filtered;
-}
+};
