@@ -6,13 +6,8 @@ import { ItemForm } from './ItemForm';
 import PropTypes from 'prop-types';
 
 export const ItemColumn = ({ column, sendToForm, reset, search }) => {
-  console.log(
-    'these are ordered types: ',
-    typeof column,
-    typeof sendToForm,
-    typeof reset,
-    typeof search
-  );
+  const [hovering, setHovering] = useState(false);
+
   const [items, setItems] = useState([
     {
       //generate uuid for mapping components that can be re-ordered
@@ -70,7 +65,7 @@ export const ItemColumn = ({ column, sendToForm, reset, search }) => {
   //delete an item from the item array
 
   return (
-    <View style={{ maxWidth: '33%', flex: 1, gap: '15px' }}>
+    <View style={styles.ItemColumn}>
       <Text style={[styles.text, { textAlign: 'center', fontSize: 16, fontWeight: 'bold' }]}>
         Items {search ? 'they' : 'you'} {column}:
       </Text>
@@ -85,8 +80,11 @@ export const ItemColumn = ({ column, sendToForm, reset, search }) => {
           />
         );
       })}
-      <Pressable onPress={addItem}>
-        <Text style={[styles.text, styles.button()]}>Add Item</Text>
+      <Pressable
+        onPress={addItem}
+        onHoverIn={() => setHovering(true)}
+        onHoverOut={() => setHovering(false)}>
+        <Text style={[styles.text, styles.button(hovering)]}>Add Item</Text>
       </Pressable>
     </View>
   );

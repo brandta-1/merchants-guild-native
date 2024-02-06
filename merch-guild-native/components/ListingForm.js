@@ -5,6 +5,8 @@ import { ItemColumn } from './ItemColumn';
 import PropTypes from 'prop-types';
 
 export const ListingForm = ({ sendToParent, search, reset }) => {
+  const [hovering, setHovering] = useState(false);
+
   const [formState, setFormState] = useState({
     owner: '',
     description: '',
@@ -70,8 +72,11 @@ export const ListingForm = ({ sendToParent, search, reset }) => {
           </>
         )}
 
-        <Pressable onPress={() => sendToParent(formState)}>
-          <Text style={[styles.text, styles.button()]}>Send to Net</Text>
+        <Pressable
+          onPress={() => sendToParent(formState)}
+          onHoverIn={() => setHovering(true)}
+          onHoverOut={() => setHovering(false)}>
+          <Text style={[styles.text, styles.button(hovering)]}>Search</Text>
         </Pressable>
       </View>
     </>

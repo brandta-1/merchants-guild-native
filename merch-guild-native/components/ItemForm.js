@@ -103,8 +103,11 @@ export const ItemForm = ({ updateToParent, id, length, deleteItem }) => {
       </View>
       {length > 1 && (
         <View>
-          <Pressable onPress={() => deleteItem(id)} onHoverIn={() => setHovering((c) => !c)}>
-            <Text style={[styles.text, styles.button(hovering)]}>Remove Item</Text>
+          <Pressable
+            onPress={() => deleteItem(id)}
+            onHoverIn={() => setHovering(true)}
+            onHoverOut={() => setHovering(false)}>
+            <Text style={[styles.text, styles.button(hovering, true)]}>Remove Item</Text>
           </Pressable>
         </View>
       )}

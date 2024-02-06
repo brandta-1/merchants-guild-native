@@ -25,6 +25,7 @@ export default StyleSheet.create({
       fontFamily: 'Helvetica'
     }
   },
+
   preview: {
     backgroundColor: '#303030',
     paddingVertical: 8,
@@ -32,31 +33,44 @@ export default StyleSheet.create({
     borderStyle: 'outset',
     borderWidth: 'medium'
   },
+
+  ListingPreview: (hover) => {
+    return {
+      borderStyle: 'outset',
+      borderWidth: 'medium',
+      backgroundColor: '#222222',
+      borderColor: hover ? '#00ff00' : '#222222'
+    };
+  },
+
   text: {
     fontFamily: 'Helvetica',
     color: '#EBCE76'
   },
+
   view: {
     flex: 1,
     alignItems: 'center',
-    gap: 6
+    gap: '1.5rem'
   },
+
   border: {
     borderRadius: 4,
     borderWidth: 2,
     borderColor: '#fff'
   },
-  button: (hover) => {
+
+  button: (hover, deleteBool) => {
     return {
       paddingVertical: 6,
       paddingHorizontal: 12,
       elevation: 3,
       borderRadius: '0px',
-      backgroundColor: '#222222',
+      backgroundColor: hover ? '#3F372F' : '#222222',
       textAlign: 'center',
       borderStyle: 'outset',
       borderWidth: 'medium',
-      borderColor: hover ? '#ff0000' : '#222222'
+      borderColor: hover ? (deleteBool ? '#ff0000' : 'orange') : '#222222'
     };
   },
 
@@ -64,6 +78,18 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     color: '#000'
   },
+
+  ItemColumn: {
+    maxWidth: '100%',
+    flex: 1,
+    gap: '15px'
+  },
+
+  ItemsPreview: {
+    backgroundColor: '#222222',
+    minWidth: '95%'
+  },
+
   headerButtonsView: {
     flex: 1,
     flexDirection: 'row',
@@ -110,6 +136,7 @@ export default StyleSheet.create({
   label: {
     color: 'rgb(150,150,150)'
   },
+
   container: {
     flex: 1,
     alignItems: 'center',
@@ -125,7 +152,8 @@ export default StyleSheet.create({
         ...base,
         ...this.button(),
         '&:hover': {
-          borderColor: 'red'
+          borderColor: 'orange',
+          backgroundColor: '#3F372F'
         }
       })
     };
