@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import styles from '../utils/styles';
+import { View, Pressable } from 'react-native';
+import styles, { dynamicWidth } from '../utils/styles';
 import { cleanseArray } from '../utils/clean';
 import { ListingForm } from '../components/ListingForm';
 import { GET_LISTING } from '../utils/queries';
@@ -68,6 +68,8 @@ export default function Search() {
       console.log('not firing');
     }
   };
+  const wBool = dynamicWidth();
+  const [hovering, setHovering] = useState('none');
 
   return (
     <>
@@ -78,12 +80,18 @@ export default function Search() {
           <>
             {listings.map((i) => {
               return (
-                <ListingPreview
-                  listing={i}
+                <Pressable
                   key={i._id}
-                  removeListing={removeListing}
-                  search={true}
-                />
+                  style={styles.query(wBool)}
+                  onHoverIn={() => setHovering(i._id)}
+                  onHoverOut={() => setHovering('none')}>
+                  <ListingPreview
+                    listing={i}
+                    removeListing={removeListing}
+                    search={true}
+                    hovering={hovering}
+                  />
+                </Pressable>
               );
             })}
           </>

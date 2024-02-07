@@ -22,7 +22,8 @@ export default StyleSheet.create({
     headerTintColor: '#fff',
     headerTitleStyle: {
       fontWeight: 'bold',
-      fontFamily: 'Helvetica'
+      fontFamily: 'Helvetica',
+      color: '#EBCE76'
     }
   },
 
@@ -86,7 +87,6 @@ export default StyleSheet.create({
   },
 
   ItemsPreview: {
-    backgroundColor: '#222222',
     minWidth: '95%'
   },
 
@@ -94,8 +94,8 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: '15px',
-    gap: '2%'
+    marginRight: '5px',
+    gap: '5px'
   },
 
   headerButtons: {
@@ -134,6 +134,7 @@ export default StyleSheet.create({
   },
 
   label: {
+    fontFamily: 'Helvetica',
     color: 'rgb(150,150,150)'
   },
 

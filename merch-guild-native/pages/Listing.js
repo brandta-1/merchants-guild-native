@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import styles from '../utils/styles';
+import styles, { dynamicWidth } from '../utils/styles';
 import { cleanseArray } from '../utils/clean';
 import { ListingForm } from '../components/ListingForm';
 import { DELETE_LISTING, SET_LISTING } from '../utils/mutations';
@@ -8,6 +8,7 @@ import { GET_LISTING } from '../utils/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { ListingPreview } from '../components/ListingPreview';
 import { v4 as uuidv4 } from 'uuid';
+import { Pressable } from 'react-native';
 
 export default function Listing() {
   const [SetListing] = useMutation(SET_LISTING);
@@ -74,7 +75,7 @@ export default function Listing() {
   };
 
   const updateFromChild = (formState) => {
-    const { owner, have, want } = formState;
+    const { owner, have, want, description } = formState;
 
     //TODO implement an alert
     let cleanOwner = owner;
@@ -92,12 +93,15 @@ export default function Listing() {
       sendToNet({
         have: cleanHave,
         want: cleanWant,
-        owner: cleanOwner
+        owner: cleanOwner,
+        description: description
       });
     } else {
       console.log('not firing');
     }
   };
+  const wBool = dynamicWidth();
+  const [hovering, setHovering] = useState('none');
 
   return (
     <View style={styles.view}>
@@ -107,12 +111,18 @@ export default function Listing() {
         <>
           {listings.map((i) => {
             return (
-              <ListingPreview
-                listing={i}
+              <Pressable
                 key={i._id}
-                removeListing={removeListing}
-                search={false}
-              />
+                style={styles.query(wBool)}
+                onHoverIn={() => setHovering(i._id)}
+                onHoverOut={() => setHovering('none')}>
+                <ListingPreview
+                  listing={i}
+                  removeListing={removeListing}
+                  search={false}
+                  hovering={hovering}
+                />
+              </Pressable>
             );
           })}
         </>

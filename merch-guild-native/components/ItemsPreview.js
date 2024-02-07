@@ -10,14 +10,14 @@ export const ItemsPreview = ({ items }) => {
       {items.map((i) => {
         return (
           <View style={styles.ItemsPreview} key={uuidv4()}>
-            <Text style={[styles.text, styles[`${i.rarity}`.toLowerCase()], { fontSize: 20 }]}>
+            <Text style={[styles.text, styles[`${i.rarity}`.toLowerCase()], { fontSize: 24 }]}>
               {i.name}
             </Text>
 
             {i.enchantments.map((k, l) => {
               return (
                 <Text style={styles.text} key={l}>
-                  {k.value ? `+${k.value} ${k.property}` : `+${k.property}`}
+                  {k.value ? ` +${k.value} ${k.property}` : ` +${k.property}`}
                 </Text>
               );
             })}

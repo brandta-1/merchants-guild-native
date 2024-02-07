@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
@@ -5,12 +6,7 @@ import { pages } from './pages';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import styles from './utils/styles';
 import { HeaderNav } from './components/HeaderNav';
-import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 
-if (__DEV__) {  // Adds messages only in a dev environment
-  loadDevMessages();
-  loadErrorMessages();
-}
 const Stack = createNativeStackNavigator();
 
 const setAuthLink = setContext((request, previousContext) => ({
@@ -21,9 +17,8 @@ const setAuthLink = setContext((request, previousContext) => ({
 }));
 
 const httpLink = new HttpLink({
-  uri: '/graphql',
+  uri: '/graphql'
 });
-
 
 //init GQL client, attach the client's jwt to their requests
 const client = new ApolloClient({
@@ -36,7 +31,6 @@ const client = new ApolloClient({
 });
 
 export default function App() {
-
   //managing header buttons at top level means they dont have direct access to the navigation prop
   const navRef = useNavigationContainerRef();
 
@@ -44,27 +38,24 @@ export default function App() {
     <ApolloProvider client={client}>
       <NavigationContainer ref={navRef}>
         <Stack.Navigator initialRouteName='Search' screenOptions={styles.main}>
-          
-            {pages.map((i, j) => {
-
-              //pull the names of all pages other than the current one
-              const others = pages.filter((k) => k.name != i.name).map((l) => l.name);
-              return (
-                <Stack.Screen
-                  key={j}
-                  name={i.name}
-                  component={i.component}
-                  options={{
-                    contentStyle: {backgroundColor: "#303030", minHeight: 'auto'},
-                    title: i.name,
-                    headerLeft: () => null,
-                    //the buttons use the ref to wait for the navigators to finish mounting
-                    headerRight: () => (<HeaderNav others={others} navRef={navRef} />)
-                  }}
-                />
-              )
-            })}
-      
+          {pages.map((i, j) => {
+            //pull the names of all pages other than the current one
+            const others = pages.filter((k) => k.name != i.name).map((l) => l.name);
+            return (
+              <Stack.Screen
+                key={j}
+                name={i.name}
+                component={i.component}
+                options={{
+                  contentStyle: { backgroundColor: '#303030', minHeight: 'auto' },
+                  title: i.name,
+                  headerLeft: () => null,
+                  //the buttons use the ref to wait for the navigators to finish mounting
+                  headerRight: () => <HeaderNav others={others} navRef={navRef} />
+                }}
+              />
+            );
+          })}
         </Stack.Navigator>
 
         {/* <Router>
@@ -78,4 +69,3 @@ export default function App() {
     </ApolloProvider>
   );
 }
-
