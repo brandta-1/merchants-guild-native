@@ -7,8 +7,6 @@ import Auth from '../utils/auth';
 import PropTypes from 'prop-types';
 
 export default function Login({ navigation }) {
-  console.log('typeof navigation: ', typeof navigation);
-
   const [SetUser] = useMutation(SET_USER);
   const [Login] = useMutation(LOGIN_USER);
 

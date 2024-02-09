@@ -52,10 +52,6 @@ export const ItemForm = ({ updateToParent, id, length, deleteItem }) => {
     updateToParent(item, id);
   }, [item]);
 
-  useEffect(() => {
-    console.log('hovering: ', hovering);
-  }, [hovering]);
-
   //the number of enchantments is determined by the rarity, with rarer items giving more
   //since enchantments will also be potentially re-ordered, they need IDs
   useEffect(() => {

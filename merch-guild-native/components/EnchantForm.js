@@ -6,7 +6,6 @@ import { itemProperties } from '../utils/items';
 import PropTypes from 'prop-types';
 
 export const EnchantForm = ({ id, updateToParent }) => {
-  console.log('THIS IS id: ', id);
   const [enchant, setEnchant] = useState(null);
 
   //prop drilling

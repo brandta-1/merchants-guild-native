@@ -5,7 +5,6 @@ import Auth from '../utils/auth';
 import PropTypes from 'prop-types';
 
 export const HeaderNav = ({ others, navRef }) => {
-  console.log('this is navref: ', typeof others);
   return (
     <View style={styles.headerButtonsView}>
       {/* change the header buttons if the user logs in */}
