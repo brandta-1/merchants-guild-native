@@ -7,6 +7,7 @@ import { GET_LISTING } from '../utils/queries';
 import { DELETE_LISTING } from '../utils/mutations';
 import { ListingPreview } from '../components/ListingPreview';
 import { useMutation, useLazyQuery } from '@apollo/client';
+import { SortingForm } from '../components/SortingForm';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Search() {
@@ -78,6 +79,7 @@ export default function Search() {
 
         {listings && (
           <>
+            <SortingForm />
             {listings.map((i) => {
               return (
                 <Pressable
