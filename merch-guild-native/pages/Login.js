@@ -7,6 +7,7 @@ import Auth from '../utils/auth';
 import PropTypes from 'prop-types';
 
 export default function Login({ navigation }) {
+  const [hovering, setHovering] = useState(false);
   const [SetUser] = useMutation(SET_USER);
   const [Login] = useMutation(LOGIN_USER);
 
@@ -67,8 +68,12 @@ export default function Login({ navigation }) {
             placeholder={'password'}
             onChangeText={(e) => setPassword(e)}
           />
-          <Pressable onPress={(e) => handleLoginSubmit(e)}>
-            <Text style={styles.text}>login</Text>
+          <Pressable
+            onHoverIn={() => setHovering('login')}
+            onHoverOut={() => setHovering('none')}
+            onPress={(e) => handleLoginSubmit(e)}>
+            {/* TODO: publish a library that lets people create hoverable buttons in react native*/}
+            <Text style={[styles.text, styles.button(hovering == 'login')]}>login</Text>
           </Pressable>
         </View>
         <View
@@ -90,8 +95,11 @@ export default function Login({ navigation }) {
             placeholder={'new password'}
             onChangeText={(e) => setPassword(e)}
           />
-          <Pressable onPress={(e) => handleSignUpSubmit(e)}>
-            <Text style={styles.text}>signup</Text>
+          <Pressable
+            onHoverIn={() => setHovering('signup')}
+            onHoverOut={() => setHovering('none')}
+            onPress={(e) => handleSignUpSubmit(e)}>
+            <Text style={[styles.text, styles.button(hovering == 'signup')]}>signup</Text>
           </Pressable>
         </View>
       </View>
